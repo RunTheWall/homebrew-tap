@@ -1,0 +1,30 @@
+cask "constly" do
+  arch arm: "aarch64", intel: "x86_64"
+
+  version "4.6.3"
+  sha256 arm:   "a931fc83e96271b89bba24098a9a900525d12b58086d7248ab45eeb00e3c907d",
+         intel: "bd8e26add6c9244f2ce1b641276f4b0192070794ae36f5c5cddfc53cc41627a0"
+
+  url "https://downloads.constly.com/v#{version}/Constly_#{version}_#{arch}.dmg",
+      verified: "downloads.constly.com/"
+  name "Constly"
+  desc "WYSIWYG markdown editor that renders the marks away as you type"
+  homepage "https://constly.com/"
+
+  # Constly ships its own signed, minisign-verified auto-updater; let it drive
+  # upgrades so brew never fights the in-app update (per RTW distribution
+  # decision, 7 Aug 2026). `brew upgrade` becomes a no-op for this cask.
+  auto_updates true
+  depends_on macos: :big_sur
+
+  app "Constly.app"
+
+  zap trash: [
+    "~/Library/Application Support/com.constly.app",
+    "~/Library/Caches/com.constly.app",
+    "~/Library/HTTPStorages/com.constly.app",
+    "~/Library/Preferences/com.constly.app.plist",
+    "~/Library/Saved Application State/com.constly.app.savedState",
+    "~/Library/WebKit/com.constly.app",
+  ]
+end
