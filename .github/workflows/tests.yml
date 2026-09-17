@@ -6,25 +6,38 @@ on:
       - main
   pull_request:
   schedule:
-    # Weekly, so a Homebrew deprecation that lands between cask bumps still
-    # shows up here before it starts breaking `brew update` for users.
+    # Weekly canary. Homebrew deprecations that land between cask bumps show
+    # up here first, and the online audit below checks that latest.json is
+    # still reachable and that livecheck still resolves the current version.
+    # Note: GitHub disables scheduled runs on a public repo after 60 days
+    # without a commit; re-enable the workflow if that happens.
     - cron: "20 7 * * 1"
   workflow_dispatch:
 
 permissions: {}
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 defaults:
   run:
     shell: bash -xeuo pipefail {0}
 
+env:
+  # test-bot sets this itself, but pin it so a plain `brew audit` step in this
+  # workflow also fails hard on deprecations instead of staying silent.
+  HOMEBREW_DEVELOPER: 1
+  TAP: runthewall/tap
+
 jobs:
   test-bot:
-    runs-on: macos-26
+    strategy:
+      matrix:
+        os: [ macos-26 ]
+    runs-on: ${{ matrix.os }}
     permissions:
-      actions: read
-      checks: read
       contents: read
-      pull-requests: read
     steps:
       - name: Set up Homebrew
         id: set-up-homebrew
@@ -32,15 +45,22 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Check the tap was detected
+        run: test "${{ steps.set-up-homebrew.outputs.tap-name }}" = "$TAP"
+
       - name: Cache Homebrew Bundler RubyGems
         uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
           path: ${{ steps.set-up-homebrew.outputs.gems-path }}
-          key: macos-26-rubygems-${{ steps.set-up-homebrew.outputs.gems-hash }}
-          restore-keys: macos-26-rubygems-
-
-      - run: brew test-bot --only-cleanup-before
-
-      - run: brew test-bot --only-setup
+          key: ${{ matrix.os }}-rubygems-${{ steps.set-up-homebrew.outputs.gems-hash }}
+          restore-keys: ${{ matrix.os }}-rubygems-
 
       - run: brew test-bot --only-tap-syntax
+
+      # The tap-syntax audit is offline, so livecheck is only parsed there.
+      # Run it for real once a week.
+      - name: Online audit and livecheck
+        if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+        run: |
+          brew audit --cask --online --tap="$TAP"
+          brew livecheck --cask --tap "$TAP"

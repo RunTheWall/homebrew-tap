@@ -12,8 +12,9 @@ cask "constly" do
 
   livecheck do
     url "https://downloads.constly.com/latest.json"
-    strategy :json do |json|
-      json["version"]
+    regex(/^v?(\d+(?:\.\d+)+)$/i)
+    strategy :json do |json, regex|
+      json["version"].to_s[regex, 1]
     end
   end
 
