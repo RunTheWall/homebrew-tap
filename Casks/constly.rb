@@ -10,6 +10,13 @@ cask "constly" do
   desc "WYSIWYG markdown editor that renders the marks away as you type"
   homepage "https://constly.com/"
 
+  livecheck do
+    url "https://downloads.constly.com/latest.json"
+    strategy :json do |json|
+      json["version"]
+    end
+  end
+
   # Constly ships its own signed, minisign-verified auto-updater; let it drive
   # upgrades so brew never fights the in-app update (per RTW distribution
   # decision, 7 Aug 2026). `brew upgrade` becomes a no-op for this cask.
