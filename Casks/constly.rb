@@ -22,6 +22,7 @@ cask "constly" do
   # upgrades so brew never fights the in-app update (per RTW distribution
   # decision, 7 Aug 2026). `brew upgrade` becomes a no-op for this cask.
   auto_updates true
+  depends_on :macos
 
   app "Constly.app"
 
