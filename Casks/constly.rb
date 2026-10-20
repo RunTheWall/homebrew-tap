@@ -1,9 +1,9 @@
 cask "constly" do
   arch arm: "aarch64", intel: "x86_64"
 
-  version "4.10.0"
-  sha256 arm:   "d17a6a4b76665f6d7fb4fd05a72a341ce1d512d1220598c5ec9b3dc6b2cf4c4d",
-         intel: "7b54d65fd27107fef1677a108bc4e1943880063317daf571ad728c5ae4abcf56"
+  version "4.12.0"
+  sha256 arm:   "19bd12f5851d01bc39f6a74191f54b3ac301043ae9a3e95d77d68a04c37504a3",
+         intel: "cea502d85ed3fdab2a5a64787f6f488638ea04411c69a901dbd42f94557c3b93"
 
   url "https://downloads.constly.com/v#{version}/Constly_#{version}_#{arch}.dmg"
   name "Constly"
