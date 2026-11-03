@@ -5,7 +5,7 @@ cask "constly" do
   sha256 arm:   "ad477303deb578a687e50e52a60c7597134234bd52bd7f88228612db962197c5",
          intel: "e6f34486446189c9e86eb9c75b64d7db694c3291e413a6f46f899ae208a9fb1f"
 
-  url "https://downloads.constly.com/v#{version}/Constly_#{version}_#{arch}.dmg"
+  url "https://github.com/RunTheWall/constly-app/releases/download/v#{version}/Constly_#{version}_#{arch}.dmg"
   name "Constly"
   desc "WYSIWYG markdown editor that renders the marks away as you type"
   homepage "https://constly.com/"
