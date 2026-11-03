@@ -14,8 +14,9 @@ brew tap runthewall/tap
 brew install --cask constly
 ```
 
-The cask points at the signed, notarized per-arch builds hosted on
-`downloads.constly.com` (Apple Silicon and Intel). Constly ships its own
+The cask points at the signed, notarized per-arch builds attached to each
+release on [RunTheWall/constly-app](https://github.com/RunTheWall/constly-app/releases)
+(Apple Silicon and Intel), the same bytes as `downloads.constly.com`. Constly ships its own
 auto-updater and keeps itself current, so `brew upgrade` is intentionally a
 no-op for this cask (`auto_updates true`).
 
