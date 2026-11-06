@@ -14,6 +14,18 @@ brew tap runthewall/tap
 brew install --cask constly
 ```
 
+## On a company Mac
+
+IT policy may only let apps run from certain folders, such as `~/Dev` or
+`~/workspace`. This installs Constly into `~/Dev`; change the folder to one
+yours allows:
+
+```sh
+brew install --cask --appdir=~/Dev runthewall/tap/constly
+```
+
+## How it updates
+
 The cask points at the signed, notarized per-arch builds attached to each
 release on [RunTheWall/constly-app](https://github.com/RunTheWall/constly-app/releases)
 (Apple Silicon and Intel), the same bytes as `downloads.constly.com`. Constly ships its own
